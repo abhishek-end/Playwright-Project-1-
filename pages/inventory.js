@@ -2,6 +2,7 @@ export class InventoryPage {
   constructor(page) {
     this.page = page;
     this.shoppingCartBadge = page.locator('[data-test="shopping-cart-badge"]');
+    this.cartLink = this.page.locator('[data-test="shopping-cart-link"]');
   }
 
   async addProductToCart(productName) {
@@ -15,5 +16,8 @@ export class InventoryPage {
       .locator(".inventory_item")
       .filter({ hasText: productName });
     await product.locator('button[id^="remove"]').click();
+  }
+  async clickOnCart() {
+    await this.cartLink.click();
   }
 }
