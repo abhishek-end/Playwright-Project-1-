@@ -11,5 +11,10 @@ for (const data of AddToCartData) {
       await inventPage.addProductToCart(element);
     }
     await expect(inventPage.shoppingCartBadge).toHaveText(data.badgeCount);
+
+    for (const element of data.products) {
+      await inventPage.removeProductFromTheCart(element);
+    }
+    await expect(inventPage.shoppingCartBadge).toBeHidden();
   });
 }

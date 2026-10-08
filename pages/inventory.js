@@ -10,4 +10,10 @@ export class InventoryPage {
       .filter({ hasText: productName });
     await product.locator('button[id^="add-to-cart"]').click();
   }
+  async removeProductFromTheCart(productName) {
+    const product = this.page
+      .locator(".inventory_item")
+      .filter({ hasText: productName });
+    await product.locator('button[id^="remove"]').click();
+  }
 }
