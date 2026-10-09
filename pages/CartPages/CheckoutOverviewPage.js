@@ -1,4 +1,4 @@
-export default class CheckoutOverviewPage {
+export class CheckoutOverviewPage {
   constructor(page) {
     this.page = page;
 

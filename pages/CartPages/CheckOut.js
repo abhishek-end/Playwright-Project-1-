@@ -1,4 +1,4 @@
-export default class CartPage {
+export class CartPage {
   constructor(page) {
     this.page = page;
 
@@ -10,10 +10,10 @@ export default class CartPage {
   }
 
   //a method fill the details
-  async checkOutDetails() {
-    await this.name.fill("David");
-    await this.lastName.fill("Cha");
-    await this.zipCode.fill("123456");
+  async checkOutDetails({ fName, lName, zipCode }) {
+    await this.name.fill(fName);
+    await this.lastName.fill(lName);
+    await this.zipCode.fill(zipCode);
   }
   // method to click continue
   async continue() {
