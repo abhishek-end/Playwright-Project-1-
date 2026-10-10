@@ -1,37 +1,47 @@
 // Test data/InventoryData.js
-export const AddToCartData = [
+const AddToCartData = [
   {
     name: "add one product",
-    products: ["sauce labs backpack"],
+    products: ["Sauce Labs Backpack"],
     badgeCount: "1",
   },
   {
     name: "add two products",
-    products: ["sauce labs backpack", "sauce labs bike light"],
+    products: ["Sauce Labs Backpack", "Sauce Labs Bike Light"],
     badgeCount: "2",
   },
   {
     name: "add three products",
     products: [
-      "sauce labs backpack",
-      "sauce labs bike light",
-      "sauce labs bolt t-shirt",
+      "Sauce Labs Backpack",
+      "Sauce Labs Bike Light",
+      "Sauce Labs Bolt T-Shirt",
     ],
     badgeCount: "3",
   },
   {
     name: "add onesie only",
-    products: ["sauce labs onesie"],
+    products: ["Sauce Labs Onesie"],
     badgeCount: "1",
   },
   {
     name: "add four products",
     products: [
-      "sauce labs backpack",
-      "sauce labs bike light",
-      "sauce labs bolt t-shirt",
-      "sauce labs fleece jacket",
+      "Sauce Labs Backpack",
+      "Sauce Labs Bike Light",
+      "Sauce Labs Bolt T-Shirt",
+      "Sauce Labs Fleece Jacket",
     ],
     badgeCount: "4",
   },
 ];
+
+const detailsInfo = [
+  {
+    fName: "David",
+    lName: "Cha",
+    zipCode: "1234567",
+  },
+];
+
+export { AddToCartData, detailsInfo };
