@@ -4,31 +4,36 @@ import { InventoryPage } from "../pages/inventory";
 import { AddToCartData, detailsInfo } from "../test_data/inventoryData";
 import { CartPage as Cart } from "../pages/CartPages/CheckOut";
 import { CheckoutOverviewPage } from "../pages/CartPages/CheckoutOverviewPage";
+//made repeated code at one place
+const navigateToCheckout = async (page, element) => {
+  const inventoryCart = new InventoryPage(page);
+  for (const el of element.products) {
+    await inventoryCart.addProductToCart(el);
+  }
+  await expect(inventoryCart.shoppingCartBadge).toHaveText(element.badgeCount);
+  await inventoryCart.clickOnCart();
+  // verify the added products
+
+  const cartProducts = new CartPage(page);
+  await expect(cartProducts.productName).toHaveText(element.products);
+
+  //Click Checkout.
+  await cartProducts.checkOut();
+  await expect(page).toHaveURL(/checkout-step-one.html/);
+};
 
 test.beforeEach(async ({ page, loginObj }) => {
   await loginObj.login("standard_user", "secret_sauce");
   await expect(page.getByText("Swag Labs")).toBeVisible();
 });
 
-test("Checkout with valid customer details", async ({ page }) => {
-  for (const element of AddToCartData) {
-    const inventoryCart = new InventoryPage(page);
-    for (const el of element.products) {
-      await inventoryCart.addProductToCart(el);
-    }
-    await expect(inventoryCart.shoppingCartBadge).toHaveText(
-      element.badgeCount,
-    );
-    await inventoryCart.clickOnCart();
-    // verify the added products
+test.afterEach(async () => {
+  
+});
 
-    const cartProducts = new CartPage(page);
-    await expect(cartProducts.productName).toHaveText(element.products);
-
-    //Click Checkout.
-    await cartProducts.checkOut();
-    await expect(page).toHaveURL(/checkout-step-one.html/);
-
+for (const element of AddToCartData) {
+  test(`Checkout Full valid checkout - ${element.name}`, async ({ page }) => {
+    await navigateToCheckout(page, element);
     // Enter valid first name, last name, and postal code.
     const cartDetails = new Cart(page);
     for (const data of detailsInfo) {
@@ -45,5 +50,54 @@ test("Checkout with valid customer details", async ({ page }) => {
     await overviewCart.clickFinish();
     await expect(page).toHaveURL(/checkout-complete.html/);
     await expect(page.getByText("Thank you for your order!")).toBeVisible();
-  }
-});
+  });
+}
+for (const element of AddToCartData) {
+  test(`Empty first name - ${element.name}`, async ({ page }) => {
+    await navigateToCheckout(page, element);
+    // Enter valid first name, last name, and postal code.
+    const cartDetails = new Cart(page);
+    for (const data of detailsInfo) {
+      await cartDetails.checkOutDetails({
+        ...data,
+        fName: "",
+      });
+    }
+    await cartDetails.continue();
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Error: First Name is required",
+    );
+  });
+}
+for (const element of AddToCartData) {
+  test(`Empty Zipcode  - ${element.name}`, async ({ page }) => {
+    await navigateToCheckout(page, element);
+    const cartDetails = new Cart(page);
+    for (const element of detailsInfo) {
+      await cartDetails.checkOutDetails({
+        ...element,
+        zipCode: "",
+      });
+    }
+    await cartDetails.continue();
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Error: Postal Code is required",
+    );
+  });
+}
+for (const element of AddToCartData) {
+  test(`Empty last name - ${element.name}`, async ({ page }) => {
+    await navigateToCheckout(page, element);
+    const cartDetails = new Cart(page);
+    for (const element of detailsInfo) {
+      await cartDetails.checkOutDetails({
+        ...element,
+        lName: "",
+      });
+    }
+    await cartDetails.continue();
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Error: Last Name is required",
+    );
+  });
+}
