@@ -27,10 +27,29 @@ test.beforeEach(async ({ page, loginObj }) => {
   await expect(page.getByText("Swag Labs")).toBeVisible();
 });
 
-test.afterEach(async () => {
-  
+test.afterEach(async ({}, testInfo) => {
+  console.log(testInfo.status);
+  console.log(testInfo.duration);
+  console.log(testInfo.title);
+  console.log(testInfo.retry);
+});
+let startTime;
+
+test.beforeAll(async () => {
+  startTime = Date.now();
+  console.log("Starting SauceDemo Checkout Validation Suite");
+  console.log("startTime", new Date(startTime).toLocaleTimeString());
 });
 
+test.afterAll(async () => {
+  let endTime = Date.now();
+  let duration = (endTime - startTime) / 1000;
+  // Print "SauceDemo Checkout Validation Suite Completed".
+  console.log("SauceDemo Checkout Validation Suite Completed");
+  // Record the suite's end time.
+  console.log("end time", new Date(endTime).toLocaleTimeString());
+  console.log("Total Duration:", duration.toFixed(2));
+});
 for (const element of AddToCartData) {
   test(`Checkout Full valid checkout - ${element.name}`, async ({ page }) => {
     await navigateToCheckout(page, element);
